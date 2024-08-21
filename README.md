@@ -1,3 +1,5 @@
+**Note: The purpose of this fork is to enable editing of SVG files (Tim Skillman)**
+
 # oksvg
 oksvg is a rasterizer for a partial implementation of the SVG2.0 specification in golang.
 
