@@ -41,6 +41,8 @@ func (s *SvgIcon) SetTarget(x, y, w, h float64) {
 	scaleH := h / s.ViewBox.H
 	//TODO: This simply replaces the original matrix. The existing matrix should be factored in
 	s.Transform = rasterx.Identity.Translate(x-s.ViewBox.X, y-s.ViewBox.Y).Scale(scaleW, scaleH)
+	s.ViewBox.W *= scaleW
+	s.ViewBox.H *= scaleH
 }
 
 // **NEW** Returns the SvgIcon as an image set to a given width and height.
@@ -138,4 +140,6 @@ func (s *SvgIcon) ScaleOnPivot(scaleX, scaleY, x, y float64) {
 	s.Transform = rasterx.Identity.Translate(float64(-x), float64(-y)).Mult(s.Transform)
 	s.Transform = rasterx.Identity.Scale(scaleX, scaleY).Mult(s.Transform)
 	s.Transform = rasterx.Identity.Translate(float64(x), float64(y)).Mult(s.Transform)
+	s.ViewBox.W *= scaleX
+	s.ViewBox.H *= scaleY
 }
