@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	. "github.com/srwiley/oksvg"
-	. "github.com/srwiley/rasterx"
+	. "github.com/timskillman/oksvg"
+	. "github.com/timskillman/rasterx"
 	//"github.com/srwiley/go/scanFT"
 )
 
