@@ -3,7 +3,7 @@ module github.com/timskillman/oksvg
 go 1.22.5
 
 require (
-	github.com/timskillman/rasterx v0.0.0-20240821104915-4dae9411d929
+	github.com/timskillman/rasterx v0.0.0-20240821184739-3055e3b31b22
 	golang.org/x/image v0.19.0
 	golang.org/x/net v0.28.0
 )
