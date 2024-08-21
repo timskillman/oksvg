@@ -106,3 +106,8 @@ func (s *SvgIcon) saveImage(filePath string, m image.Image, asPng bool) error {
 	}
 	return nil
 }
+
+// **NEW** Transform the SvgIcon with the supplied transformation matrix2D
+func (s *SvgIcon) TransformIcon(mtx rasterx.Matrix2D) {
+	s.Transform = mtx.Mult(s.Transform)
+}
