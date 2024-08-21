@@ -126,7 +126,16 @@ func (s *SvgIcon) saveImage(filePath string, m image.Image, asPng bool) error {
 	return nil
 }
 
-// **NEW** Transform the SvgIcon with the supplied transformation matrix2D
-func (s *SvgIcon) TransformIcon(mtx rasterx.Matrix2D) {
-	s.Transform = mtx.Mult(s.Transform)
+// **NEW** Rotate the SvgIcon with the supplied transformation matrix2D
+func (s *SvgIcon) RotateOnPivot(angle float64, x, y float64) {
+	s.Transform = rasterx.Identity.Translate(float64(-x), float64(-y)).Mult(s.Transform)
+	s.Transform = rasterx.Identity.Rotate(angle).Mult(s.Transform)
+	s.Transform = rasterx.Identity.Translate(float64(x), float64(y)).Mult(s.Transform)
+}
+
+// **NEW** Scale the SvgIcon with the supplied transformation matrix2D
+func (s *SvgIcon) ScaleOnPivot(scaleX, scaleY, x, y float64) {
+	s.Transform = rasterx.Identity.Translate(float64(-x), float64(-y)).Mult(s.Transform)
+	s.Transform = rasterx.Identity.Scale(scaleX, scaleY).Mult(s.Transform)
+	s.Transform = rasterx.Identity.Translate(float64(x), float64(y)).Mult(s.Transform)
 }
