@@ -39,6 +39,7 @@ func (s *SvgIcon) Draw(r *rasterx.Dasher, opacity float64) {
 func (s *SvgIcon) SetTarget(x, y, w, h float64) {
 	scaleW := w / s.ViewBox.W
 	scaleH := h / s.ViewBox.H
+	//TODO: This simply replaces the original matrix. The existing matrix should be factored in
 	s.Transform = rasterx.Identity.Translate(x-s.ViewBox.X, y-s.ViewBox.Y).Scale(scaleW, scaleH)
 }
 
@@ -46,7 +47,7 @@ func (s *SvgIcon) SetTarget(x, y, w, h float64) {
 // However, if width is set to -1 then the original width of the SvgIcon is used.
 // If the height is set to -1 then the SvgIcon maintains its aspect ratio even when
 // an arbitrary width is set
-func (s *SvgIcon) AsImage(width, height float64) image.Image {
+func (s *SvgIcon) AsImageResize(width, height float64) image.Image {
 	if width < 1 {
 		width = s.ViewBox.W
 	}
@@ -55,7 +56,15 @@ func (s *SvgIcon) AsImage(width, height float64) image.Image {
 		height = s.ViewBox.H * sc
 	}
 	s.SetTarget(0, 0, width, height)
-	w, h := int(width), int(height)
+	return s.asImage(int(width), int(height))
+}
+
+// **NEW** Returns the SvgIcon as an image set to its original width and height.
+func (s *SvgIcon) AsImage() image.Image {
+	return s.asImage(int(s.ViewBox.W), int(s.ViewBox.H))
+}
+
+func (s *SvgIcon) asImage(w, h int) image.Image {
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
 	scannerGV := rasterx.NewScannerGV(w, h, img, img.Bounds())
 	raster := rasterx.NewDasher(w, h, scannerGV)
@@ -67,16 +76,26 @@ func (s *SvgIcon) AsImage(width, height float64) image.Image {
 // However, if width is set to -1 then the original width of the SvgIcon is used.
 // If the height is set to -1 then the SvgIcon maintains its aspect ratio even when
 // an arbitrary width is set
-func (s *SvgIcon) SaveAsPng(filePath string, w, h float64) error {
-	return s.saveImage(filePath, s.AsImage(w, h), true)
+func (s *SvgIcon) SaveAsPngResized(filePath string, w, h float64) error {
+	return s.saveImage(filePath, s.AsImageResize(w, h), true)
 }
 
 // **NEW** The SvgIcon is saved as a JPEG file set to a given width and height.
 // However, if width is set to -1 then the original width of the SvgIcon is used.
 // If the height is set to -1 then the SvgIcon maintains its aspect ratio even when
 // an arbitrary width is set
-func (s *SvgIcon) SaveAsJpeg(filePath string, w, h float64) error {
-	return s.saveImage(filePath, s.AsImage(w, h), false)
+func (s *SvgIcon) SaveAsJpegResized(filePath string, w, h float64) error {
+	return s.saveImage(filePath, s.AsImageResize(w, h), false)
+}
+
+// **NEW** The SvgIcon is saved as a PNG file.
+func (s *SvgIcon) SaveAsPng(filePath string) error {
+	return s.saveImage(filePath, s.AsImage(), true)
+}
+
+// **NEW** The SvgIcon is saved as a JPEG file.
+func (s *SvgIcon) SaveAsJpeg(filePath string) error {
+	return s.saveImage(filePath, s.AsImage(), false)
 }
 
 func (s *SvgIcon) saveImage(filePath string, m image.Image, asPng bool) error {
