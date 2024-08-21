@@ -46,7 +46,7 @@ func (s *SvgIcon) SetTarget(x, y, w, h float64) {
 // However, if width is set to -1 then the original width of the SvgIcon is used.
 // If the height is set to -1 then the SvgIcon maintains its aspect ratio even when
 // an arbitrary width is set
-func (s *SvgIcon) AsImage(width float64, height float64) image.Image {
+func (s *SvgIcon) AsImage(width, height float64) image.Image {
 	if width < 1 {
 		width = s.ViewBox.W
 	}
@@ -67,7 +67,7 @@ func (s *SvgIcon) AsImage(width float64, height float64) image.Image {
 // However, if width is set to -1 then the original width of the SvgIcon is used.
 // If the height is set to -1 then the SvgIcon maintains its aspect ratio even when
 // an arbitrary width is set
-func (s *SvgIcon) SaveAsPng(filePath string, w float64, h float64) error {
+func (s *SvgIcon) SaveAsPng(filePath string, w, h float64) error {
 	return s.saveImage(filePath, s.AsImage(w, h), true)
 }
 
@@ -75,7 +75,7 @@ func (s *SvgIcon) SaveAsPng(filePath string, w float64, h float64) error {
 // However, if width is set to -1 then the original width of the SvgIcon is used.
 // If the height is set to -1 then the SvgIcon maintains its aspect ratio even when
 // an arbitrary width is set
-func (s *SvgIcon) SaveAsJpeg(filePath string, w float64, h float64) error {
+func (s *SvgIcon) SaveAsJpeg(filePath string, w, h float64) error {
 	return s.saveImage(filePath, s.AsImage(w, h), false)
 }
 
