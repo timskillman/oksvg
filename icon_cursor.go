@@ -14,7 +14,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/srwiley/rasterx"
+	"github.com/timskillman/rasterx"
 )
 
 // IconCursor is used while parsing SVG files.
