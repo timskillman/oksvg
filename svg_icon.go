@@ -6,6 +6,12 @@
 package oksvg
 
 import (
+	"bufio"
+	"image"
+	"image/jpeg"
+	"image/png"
+	"os"
+
 	"github.com/timskillman/rasterx"
 )
 
@@ -34,4 +40,54 @@ func (s *SvgIcon) SetTarget(x, y, w, h float64) {
 	scaleW := w / s.ViewBox.W
 	scaleH := h / s.ViewBox.H
 	s.Transform = rasterx.Identity.Translate(x-s.ViewBox.X, y-s.ViewBox.Y).Scale(scaleW, scaleH)
+}
+
+func (s *SvgIcon) AsImage(width float64, height float64) image.Image {
+	if height < 1 {
+		sc := width / s.ViewBox.W
+		height = s.ViewBox.H * sc
+	}
+	s.SetTarget(0, 0, width, height)
+	w, h := int(width), int(height)
+	img := image.NewRGBA(image.Rect(0, 0, w, h))
+	scannerGV := rasterx.NewScannerGV(w, h, img, img.Bounds())
+	raster := rasterx.NewDasher(w, h, scannerGV)
+	s.Draw(raster, 1.0)
+	return img
+}
+
+func (s *SvgIcon) SaveAsPng(filePath string, w float64, h float64) error {
+	return s.saveImage(filePath, s.AsImage(w, h), true)
+}
+
+func (s *SvgIcon) SaveAsJpeg(filePath string, w float64, h float64) error {
+	return s.saveImage(filePath, s.AsImage(w, h), false)
+}
+
+func (s *SvgIcon) saveImage(filePath string, m image.Image, asPng bool) error {
+	// Create the file
+	f, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	// Create Writer from file
+	w := bufio.NewWriter(f)
+
+	// Write the image as either PNG or JPEG into the buffer
+	if asPng {
+		if err := png.Encode(w, m); err != nil {
+			return err
+		}
+	} else {
+		if err := jpeg.Encode(w, m, nil); err != nil {
+			return err
+		}
+	}
+
+	if err := w.Flush(); err != nil {
+		return err
+	}
+	return nil
 }
