@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/srwiley/rasterx"
+	"github.com/timskillman/rasterx"
 	"golang.org/x/image/colornames"
 )
 
