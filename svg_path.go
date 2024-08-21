@@ -8,7 +8,7 @@ package oksvg
 import (
 	"image/color"
 
-	"github.com/srwiley/rasterx"
+	"github.com/timskillman/rasterx"
 	"golang.org/x/image/math/fixed"
 )
 
