@@ -42,7 +42,14 @@ func (s *SvgIcon) SetTarget(x, y, w, h float64) {
 	s.Transform = rasterx.Identity.Translate(x-s.ViewBox.X, y-s.ViewBox.Y).Scale(scaleW, scaleH)
 }
 
+// Returns the SvgIcon as an image set to a given width and height.
+// However, if Width is set to -1 then the original width of the SvgIcon is used.
+// If the Height is set to -1 then the SvgIcon maintains its aspect ratio even when
+// an arbitrary width is set
 func (s *SvgIcon) AsImage(width float64, height float64) image.Image {
+	if width < 1 {
+		width = s.ViewBox.W
+	}
 	if height < 1 {
 		sc := width / s.ViewBox.W
 		height = s.ViewBox.H * sc
@@ -56,10 +63,18 @@ func (s *SvgIcon) AsImage(width float64, height float64) image.Image {
 	return img
 }
 
+// The SvgIcon is saved as a PNG file set to a given width and height.
+// However, if Width is set to -1 then the original width of the SvgIcon is used.
+// If the Height is set to -1 then the SvgIcon maintains its aspect ratio even when
+// an arbitrary width is set
 func (s *SvgIcon) SaveAsPng(filePath string, w float64, h float64) error {
 	return s.saveImage(filePath, s.AsImage(w, h), true)
 }
 
+// The SvgIcon is saved as a JPEG file set to a given width and height.
+// However, if Width is set to -1 then the original width of the SvgIcon is used.
+// If the Height is set to -1 then the SvgIcon maintains its aspect ratio even when
+// an arbitrary width is set
 func (s *SvgIcon) SaveAsJpeg(filePath string, w float64, h float64) error {
 	return s.saveImage(filePath, s.AsImage(w, h), false)
 }
