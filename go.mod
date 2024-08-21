@@ -1,6 +1,6 @@
 module github.com/timskillman/oksvg
 
-go 1.17
+go 1.22.5
 
 require (
 	github.com/timskillman/rasterx v0.0.0-20210519020934-456a8d69b780
